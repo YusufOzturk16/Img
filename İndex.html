@@ -1,36 +1,86 @@
 <!DOCTYPE html>
-<html>
+<html lang="tr">
 <head>
     <meta charset="UTF-8">
+    <!-- Telefonda sayfanın doğru genişlikte açılması için -->
+    <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>DOT101 Kursu</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            background-color: #8f0053;
-            margin: 0;
-            padding: 20px;
-        }
-        h1 {
-            color: #0400ff;
-        }
-        h2 {
-            color: #ff0000;
-        }
-        p {
-            font-size: 16px;
-        }
-        hr {
-            border: 1px solid #33ff00;
-            margin-top: 20px;
+
+    <!-- Tailwind CSS: düz HTML sitesi olduğu için npm yerine CDN'den geliyor -->
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4.3.3"></script>
+    <style type="text/tailwindcss">
+        /* Ders notundaki darkMode: "class" ayarının Tailwind v4 karşılığı */
+        @custom-variant dark (&:where(.dark, .dark *));
+
+        /* Ders notundaki theme.extend ayarının karşılığı: sitenin ana rengi */
+        @theme {
+            --color-ana: #8f0053;
         }
     </style>
 </head>
-<body>
+<body class="bg-slate-50 text-slate-900 dark:bg-slate-900 dark:text-white">
 
-<h1>Dijital Oyun Tasarimi</h1>
-<h2>Dijital Oyun Tasarimi öğrencileri<br>tarafından yapılmıştır</h2>
-<p>DOT101</p>
-<hr>
-<img src="Bir Yil.jpeg" alt="Wuthering Waves">
+    <!-- Adım 1: Menü (flex) - logo solda, bağlantılar sağda -->
+    <nav class="bg-white border-b border-slate-200 dark:bg-slate-800 dark:border-slate-700">
+        <div class="flex items-center justify-between max-w-7xl mx-auto p-4 md:px-6">
+            <span class="text-lg font-bold text-ana dark:text-pink-400">DOT101</span>
+            <div class="flex items-center gap-4 md:gap-6">
+                <a href="#oyunlar" class="hover:text-ana dark:hover:text-pink-400">Oyunlar</a>
+                <a href="#galeri" class="hover:text-ana dark:hover:text-pink-400">Galeri</a>
+                <button id="temaButonu" type="button" class="px-3 py-1 rounded border border-slate-300 cursor-pointer dark:border-slate-600">🌙 Koyu</button>
+            </div>
+        </div>
+    </nav>
+
+    <main class="max-w-7xl mx-auto p-4 md:p-6">
+
+        <!-- Başlık alanı -->
+        <header class="p-6 md:p-8 bg-ana text-white rounded-lg shadow-md">
+            <h1 class="text-3xl md:text-4xl font-bold">Wuthering Waves İstatistik Kartı</h1>
+            <h2 class="mt-2 text-base md:text-lg">Dijital Oyun Tasarimi: Yusuf Öztürk adlı öğrencisi<br>tarafından yapılmıştır</h2>
+        </header>
+
+        <!-- Adım 2: Oyun listesi (grid) - mobilde 1, tablette 2, masaüstünde 3 sütun -->
+        <section id="oyunlar" class="mt-8">
+            <h2 class="mb-4 text-2xl font-bold text-slate-800 dark:text-white">Oyunlar</h2>
+            <div id="oyunListesi" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4"></div>
+        </section>
+
+        <!-- Resim çok geniş olduğu için kendi kutusunda yana kayar, sayfayı taşırmaz -->
+        <section id="galeri" class="mt-8">
+            <h2 class="mb-4 text-2xl font-bold text-slate-800 dark:text-white">Galeri</h2>
+            <div class="overflow-x-auto rounded-lg shadow-md">
+                <img src="Bir Yil.jpeg" alt="Wuthering Waves" class="h-64 md:h-96 max-w-none">
+            </div>
+        </section>
+
+    </main>
+
+    <script>
+        // Örnek oyunlar ders notundan alındı, kendi oyunlarınla değiştirebilirsin
+        const oyunlar = [
+            { baslik: "Uzay Avcısı", tur: "Aksiyon" },
+            { baslik: "Bulmaca Krallığı", tur: "Bulmaca" },
+            { baslik: "Orman Koşusu", tur: "Platform" },
+        ];
+
+        // Adım 3: Oyun kartı - stil tek yerde, bütün kartlar buradan üretilir
+        function oyunKarti(oyun) {
+            return `
+                <div class="p-4 bg-white rounded-lg shadow-md transition hover:shadow-lg dark:bg-slate-800">
+                    <h3 class="text-xl font-bold text-slate-800 dark:text-white">${oyun.baslik}</h3>
+                    <p class="text-sm text-slate-500 dark:text-slate-400">Tür: ${oyun.tur}</p>
+                </div>`;
+        }
+
+        document.getElementById("oyunListesi").innerHTML = oyunlar.map(oyunKarti).join("");
+
+        // Adım 4: Dark mode - <html> elemanına "dark" sınıfını ekler ya da çıkarır
+        const temaButonu = document.getElementById("temaButonu");
+        temaButonu.addEventListener("click", function () {
+            const koyu = document.documentElement.classList.toggle("dark");
+            temaButonu.textContent = koyu ? "☀️ Açık" : "🌙 Koyu";
+        });
+    </script>
 </body>
 </html>
